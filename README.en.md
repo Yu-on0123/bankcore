@@ -11,7 +11,7 @@
 
 A banking module built **around the database**: business rules, security, auditing and backups all live in **Oracle**. A small **Python (Flask) API** calls the PL/SQL package, and a **web teller interface** sits on top of that API. Every refusal (insufficient funds, blocked account…) comes from the database, not from application code.
 
-<!-- Online demo: add the link here once the project is deployed on Render -->
+  **[Live demo](https://bankcore-xkfy.onrender.com/)** — demo version without Oracle (fictitious in-memory data). The full Oracle + PL/SQL architecture runs with Docker, see below. The first visit can be slow on the free plan (about thirty seconds).
 
 | Teller desk (light theme, French) | Teller desk (dark theme, English) |
 |---|---|

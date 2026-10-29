@@ -11,7 +11,7 @@
 
 Un module bancaire construit **autour de la base de données** : la logique métier, la sécurité, l'audit et les sauvegardes vivent dans **Oracle**. Une petite **API Python (Flask)** appelle le package PL/SQL, et une **interface web de guichet** s'appuie sur cette API. Chaque refus (solde insuffisant, compte bloqué…) vient de la base, pas du code applicatif.
 
-<!-- Démo en ligne : ajouter ici le lien une fois le projet déployé sur Render -->
+  **[Voir la démo en ligne](https://bankcore-xkfy.onrender.com/)** — version de démonstration sans Oracle (données fictives en mémoire). L'architecture complète Oracle + PL/SQL se lance avec Docker, voir plus bas. Première visite lente sur le plan gratuit (une trentaine de secondes).
 
 | Guichet (thème clair, français) | Guichet (thème sombre, anglais) |
 |---|---|
