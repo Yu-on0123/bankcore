@@ -236,7 +236,7 @@ Le `Dockerfile` ne concerne que cette démo : la version complète (Oracle XE + 
 
 ## Auteur
 
-**Yu-on AHINDE** — analyste informatique et programmeur · [GitHub](https://github.com/Yu-on0123) · [Dépôt du projet](https://github.com/Yu-on0123/BankCore)
+**Yu-on AHINDE** — analyste informatique et programmeur · [GitHub](https://github.com/Yu-on0123) · [Dépôt du projet](https://github.com/Yu-on0123/bankcore)
 
 ## Licence
 
