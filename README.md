@@ -54,7 +54,6 @@ bankcore/
 │   ├── dev_mock.py  serveur de démonstration sans Oracle
 │   ├── tests/       tests pytest (API à pool simulé, serveur de démo)
 │   └── static/      interface (index.html, css/, js/ dont i18n.js, fonts/)
-├── design/          notes de conception de l'interface (audit, direction, tokens, écrans)
 ├── docs/            captures d'écran du README
 ├── .github/         intégration continue
 ├── Dockerfile       image de la démo en ligne (sans Oracle)
