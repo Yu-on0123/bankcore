@@ -1,0 +1,15 @@
+# Secrets et données locales
+.env
+backup/*
+!backup/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Divers
+.DS_Store
+Thumbs.db

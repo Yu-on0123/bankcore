@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>BankCore, guichet</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a6656'/%3E%3Cpath d='M9 22V10h7a3.5 3.5 0 0 1 0 7H9m7 0a3.5 3.5 0 0 1 0 7H9' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>
+  /* Thème appliqué avant le premier rendu (évite le flash). */
+  try { var t = localStorage.getItem('bankcore-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+        else if (matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+</script>
+<link rel="preload" href="/static/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-arrow-down-to-line" viewBox="0 0 24 24"><path d="M12 17V3" />
+  <path d="m6 11 6 6 6-6" />
+  <path d="M19 21H5" /></symbol>
+<symbol id="i-arrow-up-from-line" viewBox="0 0 24 24"><path d="m18 9-6-6-6 6" />
+  <path d="M12 3v14" />
+  <path d="M5 21h14" /></symbol>
+<symbol id="i-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4" />
+  <path d="M4 7h16" />
+  <path d="m16 21 4-4-4-4" />
+  <path d="M20 17H4" /></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+  <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+  <path d="m9 12 2 2 4-4" /></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34" />
+  <circle cx="11" cy="11" r="8" /></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" /></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol>
+<symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" />
+  <line x1="8" x2="16" y1="21" y2="21" />
+  <line x1="12" x2="12" y1="17" y2="21" /></symbol>
+<symbol id="i-circle-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" />
+  <path d="m16 9-5.5 5.5L8 12" /></symbol>
+<symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+  <path d="M12 9v4" />
+  <path d="M12 17h.01" /></symbol>
+<symbol id="i-circle-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" />
+  <path d="m15 9-6 6" />
+  <path d="m9 9 6 6" /></symbol>
+<symbol id="i-refresh-cw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+  <path d="M21 3v5h-5" />
+  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+  <path d="M8 16H3v5" /></symbol>
+<symbol id="i-landmark" viewBox="0 0 24 24"><path d="M10 18v-7" />
+  <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
+  <path d="M14 18v-7" />
+  <path d="M18 18v-7" />
+  <path d="M3 22h18" />
+  <path d="M6 18v-7" /></symbol>
+<symbol id="i-file-text" viewBox="0 0 24 24"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+  <path d="M10 9H8" />
+  <path d="M16 13H8" />
+  <path d="M16 17H8" /></symbol>
+<symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+  <path d="M3 3v5h5" />
+  <path d="M12 7v5l4 2" /></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+<symbol id="i-scroll-text" viewBox="0 0 24 24"><path d="M15 12h-5" />
+  <path d="M15 8h-5" />
+  <path d="M19 17V5a2 2 0 0 0-2-2H4" />
+  <path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" /></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+  <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+  <path d="M16 3.128a4 4 0 0 1 0 7.744" />
+  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+  <circle cx="9" cy="7" r="4" /></symbol>
+<symbol id="i-trending-down" viewBox="0 0 24 24"><path d="M16 17h6v-6" />
+  <path d="m22 17-8.5-8.5-5 5L2 7" /></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" />
+  <path d="M4.929 4.929 19.07 19.071" /></symbol>
+<symbol id="i-circle-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1" />
+  <circle cx="12" cy="12" r="10" /></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+  <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" /></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" />
+  <path d="M12 5v14" /></symbol>
+<symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+  <circle cx="9" cy="7" r="4" />
+  <line x1="19" x2="19" y1="8" y2="14" />
+  <line x1="22" x2="16" y1="11" y2="11" /></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" />
+  <path d="m6 6 12 12" /></symbol>
+</defs></svg>
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true">
+      <rect width="28" height="28" rx="8" fill="var(--accent)"/>
+      <path d="M9 7v14M12 7v14" stroke="var(--accent-fg)" stroke-width="1.4" stroke-linecap="round" opacity=".55"/>
+      <path d="M15.5 10h6M15.5 14h6M15.5 18h4" stroke="var(--accent-fg)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>BankCore <small data-i18n="brand.sub">Guichet</small></span>
+  </div>
+  <div class="topbar-right">
+    <div class="live" id="live" data-state="idle" role="status"><span class="live-dot" aria-hidden="true"></span><span class="t" id="live-text" data-i18n="live.connecting">Connexion…</span></div>
+    <div class="segmented sm lang" role="group" data-i18n-attr="aria-label:lang.label" aria-label="Langue">
+      <button type="button" data-lang-set="fr" aria-pressed="false" lang="fr" title="Français">FR</button>
+      <button type="button" data-lang-set="en" aria-pressed="false" lang="en" title="English">EN</button>
+    </div>
+    <div class="theme" role="group" data-i18n-attr="aria-label:theme.label" aria-label="Thème de l'interface">
+      <button type="button" data-theme-set="light" aria-pressed="false" data-i18n-attr="aria-label:theme.light" aria-label="Thème clair"><svg class="icon"><use href="#i-sun"/></svg></button>
+      <button type="button" data-theme-set="system" aria-pressed="false" data-i18n-attr="aria-label:theme.system" aria-label="Thème du système"><svg class="icon"><use href="#i-monitor"/></svg></button>
+      <button type="button" data-theme-set="dark" aria-pressed="false" data-i18n-attr="aria-label:theme.dark" aria-label="Thème sombre"><svg class="icon"><use href="#i-moon"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="demo-banner" id="demo-banner" role="note" hidden data-i18n="demo.banner"></div>
+
+<main class="page" id="main">
+  <div class="page-head">
+    <div>
+      <h1 data-i18n="page.title">Guichet</h1>
+      <p data-i18n-html="page.lead">Dépôts, retraits et virements.</p>
+    </div>
+    <span class="seal"><svg class="icon icon-sm"><use href="#i-lock"/></svg><span data-i18n="seal">Journal d'audit immuable</span></span>
+  </div>
+
+  <section class="kpis" data-i18n-attr="aria-label:kpis.label" aria-label="Indicateurs">
+    <div class="kpi rise" style="--i:0">
+      <div class="kpi-label"><svg class="icon icon-sm"><use href="#i-landmark"/></svg><span data-i18n="kpi.total">Encours total</span></div>
+      <div class="kpi-value" id="kpi-total" aria-live="polite">—</div>
+      <div class="kpi-sub" id="kpi-total-sub">&nbsp;</div>
+    </div>
+    <div class="kpi rise" style="--i:1">
+      <div class="kpi-label"><svg class="icon icon-sm"><use href="#i-users"/></svg><span data-i18n="kpi.active">Comptes actifs</span></div>
+      <div class="kpi-value" id="kpi-active">—</div>
+      <div class="kpi-sub" id="kpi-active-sub">&nbsp;</div>
+    </div>
+    <div class="kpi rise" style="--i:2" id="kpi-od-box">
+      <div class="kpi-label"><svg class="icon icon-sm"><use href="#i-trending-down"/></svg><span data-i18n="kpi.od">En découvert</span></div>
+      <div class="kpi-value" id="kpi-od">—</div>
+      <div class="kpi-sub" id="kpi-od-sub">&nbsp;</div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <div class="cols">
+      <div class="col-main">
+        <section class="card area-accounts" aria-labelledby="h-accounts">
+          <div class="card-head">
+            <div>
+              <h2 id="h-accounts" data-i18n="accounts.title">Comptes</h2>
+              <p data-i18n="accounts.lead">Sélectionnez un compte pour afficher son relevé et préremplir l'opération.</p>
+            </div>
+            <div class="toolbar">
+              <div class="search">
+                <svg class="icon icon-sm"><use href="#i-search"/></svg>
+                <label class="sr-only" for="q" data-i18n="search.label">Rechercher un compte ou un client</label>
+                <input class="input" id="q" type="search" data-i18n-attr="placeholder:search.placeholder" placeholder="Rechercher…" autocomplete="off">
+              </div>
+              <button class="btn btn-secondary" id="open-account" type="button"><svg class="icon icon-sm"><use href="#i-plus"/></svg><span data-i18n="open_account">Ouvrir un compte</span></button>
+              <div class="segmented sm" role="group" data-i18n-attr="aria-label:filter.label" aria-label="Filtrer par type" id="type-filter">
+                <button type="button" data-type="" aria-pressed="true" data-i18n="filter.all">Tous</button>
+                <button type="button" data-type="COURANT" aria-pressed="false" data-i18n="filter.checking">Courants</button>
+                <button type="button" data-type="EPARGNE" aria-pressed="false" data-i18n="filter.savings">Épargne</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap" id="accounts-wrap">
+            <table id="accounts" data-i18n-attr="aria-label:accounts.table" aria-label="Liste des comptes"></table>
+          </div>
+        </section>
+
+        <section class="card area-statement" aria-labelledby="stmt-title">
+          <div class="card-head">
+            <div>
+              <h2 id="stmt-title" data-i18n="stmt.title">Relevé</h2>
+              <p id="stmt-sub" data-i18n="stmt.sub.default">50 derniers mouvements du compte sélectionné.</p>
+            </div>
+          </div>
+          <div class="table-wrap" id="statement-wrap">
+            <table id="statement" class="ledger" data-i18n-attr="aria-label:stmt.table" aria-label="Relevé du compte"></table>
+          </div>
+        </section>
+      </div>
+
+      <aside class="col-side">
+        <section class="card area-op" aria-labelledby="h-op">
+          <div class="card-head">
+            <div>
+              <h2 id="h-op" data-i18n="op.title">Nouvelle opération</h2>
+              <p data-i18n="op.lead">Vérifiez l'effet sur les soldes avant de valider.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form id="op">
+              <div class="field">
+                <span class="legend" id="kind-legend" data-i18n="op.type">Type d'opération</span>
+                <div class="segmented" role="radiogroup" aria-labelledby="kind-legend" id="kind-seg">
+                  <button type="button" role="radio" aria-checked="true" data-kind="deposit" tabindex="0"><svg class="icon icon-sm"><use href="#i-arrow-down-to-line"/></svg><span data-i18n="kind.deposit">Dépôt</span></button>
+                  <button type="button" role="radio" aria-checked="false" data-kind="withdraw" tabindex="-1"><svg class="icon icon-sm"><use href="#i-arrow-up-from-line"/></svg><span data-i18n="kind.withdraw">Retrait</span></button>
+                  <button type="button" role="radio" aria-checked="false" data-kind="transfer" tabindex="-1"><svg class="icon icon-sm"><use href="#i-arrow-left-right"/></svg><span data-i18n="kind.transfer">Virement</span></button>
+                </div>
+                <!-- Contrat conservé : le champ #kind pilote la logique d'envoi -->
+                <label class="sr-only" for="kind" data-i18n="op.kind">Type</label>
+                <select id="kind" class="sr-only" tabindex="-1" aria-hidden="true">
+                  <option value="deposit" data-i18n="kind.deposit">Dépôt</option>
+                  <option value="withdraw" data-i18n="kind.withdraw">Retrait</option>
+                  <option value="transfer" data-i18n="kind.transfer">Virement</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="acc" id="acc-label" data-i18n="field.account">Compte</label>
+                <input class="input mono" id="acc" placeholder="BJ1000000001" required autocomplete="off" autocapitalize="characters" spellcheck="false" list="acc-list" aria-describedby="acc-who">
+                <div class="who" id="acc-who" aria-live="polite"></div>
+              </div>
+
+              <div class="field" id="to-wrap" hidden>
+                <label for="to" data-i18n="field.dest">Compte destinataire</label>
+                <input class="input mono" id="to" placeholder="BJ1000000002" autocomplete="off" autocapitalize="characters" spellcheck="false" list="acc-list" aria-describedby="to-who">
+                <div class="who" id="to-who" aria-live="polite"></div>
+              </div>
+              <datalist id="acc-list"></datalist>
+
+              <div class="field">
+                <label for="amount" data-i18n="field.amount">Montant</label>
+                <div class="input-affix">
+                  <input class="input" id="amount" type="number" min="1" step="1" required inputmode="numeric" placeholder="0">
+                  <span class="suffix" aria-hidden="true">FCFA</span>
+                </div>
+                <div class="chips" role="group" data-i18n-attr="aria-label:quick.label" aria-label="Montants rapides">
+                  <button type="button" class="chip" data-amt="5000">5 000</button>
+                  <button type="button" class="chip" data-amt="10000">10 000</button>
+                  <button type="button" class="chip" data-amt="50000">50 000</button>
+                  <button type="button" class="chip" data-amt="100000">100 000</button>
+                </div>
+              </div>
+
+              <div class="preview" id="preview" aria-live="polite"></div>
+
+              <button class="btn btn-primary" id="submit" type="submit" style="margin-top:16px">
+                <span class="spin" aria-hidden="true"></span><span id="submit-label">Valider le dépôt</span>
+              </button>
+            </form>
+            <div id="msg" role="status" aria-live="polite"></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="card area-clients" aria-labelledby="h-clients">
+      <div class="card-head">
+        <div>
+          <h2 id="h-clients" data-i18n="clients.title">Clients</h2>
+          <p data-i18n="clients.lead">Un client peut détenir plusieurs comptes.</p>
+        </div>
+        <button class="btn btn-secondary" id="new-client" type="button"><svg class="icon icon-sm"><use href="#i-user-plus"/></svg><span data-i18n="new_client">Nouveau client</span></button>
+      </div>
+      <div class="table-wrap" id="clients-wrap">
+        <table id="clients" data-i18n-attr="aria-label:clients.table" aria-label="Liste des clients"></table>
+      </div>
+    </section>
+
+    <section class="card area-audit" aria-labelledby="h-audit">
+      <div class="card-head">
+        <div>
+          <h2 id="h-audit" data-i18n="audit.title">Journal d'audit</h2>
+          <p data-i18n-html="audit.lead">Lecture seule, 100 dernières écritures.</p>
+        </div>
+        <button class="btn btn-secondary" id="load-audit" type="button"><svg class="icon icon-sm"><use href="#i-history"/></svg><span id="load-audit-label">Charger (utilisateur bank_auditor)</span></button>
+      </div>
+      <div class="table-wrap" id="audit-wrap">
+        <table id="audit" data-i18n-attr="aria-label:audit.table" aria-label="Journal d'audit"></table>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot"><svg class="icon icon-sm"><use href="#i-shield-check"/></svg><span data-i18n="foot">L'interface ne contient aucune règle métier.</span></p>
+</main>
+
+<dialog id="dlg-client" aria-labelledby="dc-title">
+  <form id="client-form" method="dialog" class="dlg">
+    <div class="dlg-head"><h2 id="dc-title" data-i18n="dc.title">Nouveau client</h2><p data-i18n="dc.lead">Le client pourra ensuite recevoir un ou plusieurs comptes.</p></div>
+    <div class="dlg-body">
+      <div class="grid2">
+        <div class="field"><label for="cf-first" data-i18n="field.first_name">Prénom</label><input class="input" id="cf-first" name="first_name" required maxlength="60" autocomplete="off"></div>
+        <div class="field"><label for="cf-last" data-i18n="field.last_name">Nom</label><input class="input" id="cf-last" name="last_name" required maxlength="60" autocomplete="off"></div>
+      </div>
+      <div class="field"><label for="cf-email" data-i18n="field.email">Email</label><input class="input" id="cf-email" name="email" type="email" required maxlength="120" autocomplete="off" placeholder="prenom.nom@example.com"></div>
+      <div class="field"><label for="cf-phone"><span data-i18n="field.phone">Téléphone</span> <span class="opt" data-i18n="field.optional">(facultatif)</span></label><input class="input" id="cf-phone" name="phone" type="tel" maxlength="30" autocomplete="off" placeholder="+229 97 00 00 00"></div>
+      <div class="dlg-msg err" id="client-msg" role="alert"></div>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close data-i18n="cancel">Annuler</button>
+      <button class="btn btn-primary inline" type="submit" id="client-submit"><span class="spin" aria-hidden="true"></span><span data-i18n="dc.submit">Créer le client</span></button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-account" aria-labelledby="da-title">
+  <form id="account-form" method="dialog" class="dlg">
+    <div class="dlg-head"><h2 id="da-title" data-i18n="da.title">Ouvrir un compte</h2><p data-i18n="da.lead">Le numéro (BJ…) est attribué par la base.</p></div>
+    <div class="dlg-body">
+      <div class="field"><label for="ac-client" data-i18n="field.client">Client</label><select class="input" id="ac-client" name="client_id" required></select></div>
+      <div class="field">
+        <span class="legend" id="ac-type-legend" data-i18n="da.type">Type de compte</span>
+        <div class="segmented" role="radiogroup" aria-labelledby="ac-type-legend" id="ac-type">
+          <button type="button" role="radio" aria-checked="true" data-type="COURANT" tabindex="0" data-i18n="type.COURANT">Courant</button>
+          <button type="button" role="radio" aria-checked="false" data-type="EPARGNE" tabindex="-1" data-i18n="type.EPARGNE">Épargne</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="ac-overdraft" data-i18n="field.overdraft_limit">Découvert autorisé</label>
+          <div class="input-affix"><input class="input" id="ac-overdraft" name="overdraft_limit" type="number" min="0" step="1" value="0" inputmode="numeric"><span class="suffix" aria-hidden="true">FCFA</span></div></div>
+        <div class="field"><label for="ac-initial" data-i18n="field.initial_deposit">Dépôt initial</label>
+          <div class="input-affix"><input class="input" id="ac-initial" name="initial_deposit" type="number" min="0" step="1" value="0" inputmode="numeric"><span class="suffix" aria-hidden="true">FCFA</span></div></div>
+      </div>
+      <p class="hint" id="ac-hint" data-i18n="da.hint">Un compte épargne n'a jamais de découvert.</p>
+      <div class="dlg-msg err" id="account-msg" role="alert"></div>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close data-i18n="cancel">Annuler</button>
+      <button class="btn btn-primary inline" type="submit" id="account-submit"><span class="spin" aria-hidden="true"></span><span data-i18n="da.submit">Ouvrir le compte</span></button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/static/js/i18n.js"></script>
+<script src="/static/js/app.js" defer></script>
+</body>
+</html>

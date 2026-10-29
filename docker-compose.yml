@@ -1,0 +1,21 @@
+services:
+  db:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: bankcore-db
+    restart: unless-stopped
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+    ports:
+      - "127.0.0.1:1521:1521"   # accessible uniquement depuis cette machine
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./sql:/opt/sql:ro
+      - ./backup:/opt/oracle/backup
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  oracle-data:

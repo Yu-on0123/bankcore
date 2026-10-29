@@ -1,0 +1,14 @@
+.git
+.github
+.env
+backup
+docs
+design
+sql
+scripts
+.devcontainer
+**/__pycache__
+**/.pytest_cache
+api/tests
+api/app.py
+README*.md
